@@ -3,12 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package my_servlet;
+package Servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author ADMIND
  */
-@WebServlet(name = "TimeServlet", urlPatterns = {"/TimeServlet"})
-public class TimeServlet extends HttpServlet {
+@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
+public class LoginServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,13 +37,14 @@ public class TimeServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet TimeServlet</title>");
+            out.println("<title>Servlet LoginServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            LocalDateTime currentDateTime = LocalDateTime.now();           
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String formattedDateTime = currentDateTime.format(formatter);
-            out.println("<h1>Thời gian hiện tại là: " + formattedDateTime + "</h1>");
+            String username = request.getParameter("txtUsername");
+            String password = request.getParameter("txtPassword");
+            out.println("Username :" + username);
+            out.println("</br>");
+            out.println("Password :" + password);
             out.println("</body>");
             out.println("</html>");
         }
