@@ -44,20 +44,23 @@ public class MainController extends HttpServlet {
         String url = LOGIN_PAGE;
         try {
             String action = request.getParameter("action");
-            System.out.println("action: "+ action);
+            System.out.println("action: " + action);
             if (action == null) {
                 url = LOGIN_PAGE;
             } else {
                 if (action.equals("login")) {
                     String strUserID = request.getParameter("txtUserID");
                     String strPassword = request.getParameter("txtPassword");
-                    if(isValidLogin(strUserID, strPassword)){
-                        url ="search.jsp";
+                    if (isValidLogin(strUserID, strPassword)) {
+                        url = "search.jsp";
                         UserDTO user = getUser(strUserID);
                         request.setAttribute("user", user);
-                    }else{
-                        url ="invalid.jsp";
+                    } else {
+                        url = "invalid.jsp";
                     }
+                } else if (action.equals("logout")) {
+                    request.setAttribute("user", null);
+                    url = "logout_confirm.jsp";
                 }
             }
         } catch (Exception e) {
