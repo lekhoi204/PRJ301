@@ -1,97 +1,84 @@
-<%-- 
-    Document   : header
-    Created on : Feb 17, 2025, 10:54:59 AM
-    Author     : ADMIND
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHOP Figure</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        .header {
-            background-color: #0099FF;
-            padding: 15px 0;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    .header {
+        background-color: #2c3e50;
+        padding: 1rem 0;
+        width: 100%;
+        top: 0;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
 
-        .logo {
-            color: #fff;
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-decoration: none;
-        }
+    .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .menu {
-            display: flex;
-            list-style: none;
-        }
+    .logo {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+    }
 
-        .menu-item {
-            margin: 0 15px;
-        }
+    .menu {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+    }
 
-        .menu-item a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: 0.3s;
-        }
+    .menu-item a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+    }
 
-        .menu-item a:hover {
-            color: #f39c12;
-        }
+    .menu-item a:hover {
+        color: #3498db;
+    }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            border-radius: 25px;
-            padding: 5px 10px;
-        }
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+    }
 
-        .search-input {
-            border: none;
-            outline: none;
-            padding: 5px;
-            width: 180px;
-        }
+    .search-input {
+        border: none;
+        outline: none;
+        padding: 0.2rem;
+        width: 200px;
+    }
 
-        .search-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #1a252f;
-            font-size: 1.2rem;
-        }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <div class="container">
-            <a href="#" class="logo">SHOP Figure</a>
+    .search-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #2c3e50;
+    }
+</style>
+
+<header class="header">
+    <%
+        int x = 100;
+    %>
+    <div class="container">
+        <nav class="nav">
+            <a href="#" class="logo">SHOP ONLINE</a>
             <ul class="menu">
                 <li class="menu-item"><a href="#">Trang chủ</a></li>
                 <li class="menu-item"><a href="#">Sản phẩm</a></li>
@@ -102,7 +89,6 @@
                 <input type="text" class="search-input" placeholder="Tìm kiếm...">
                 <button class="search-button">🔍</button>
             </div>
-        </div>
-    </header>
-</body>
-</html>
+        </nav>
+    </div>
+</header>
