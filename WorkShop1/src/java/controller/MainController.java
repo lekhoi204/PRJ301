@@ -5,7 +5,9 @@
  */
 package controller;
 
+import dao.MobileDAO;
 import dao.UserDAO;
+import dto.MobileDTO;
 import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,8 +65,14 @@ public class MainController extends HttpServlet {
                     }
                 }else  if (action.equals("logout")) {
                     request.getSession().invalidate(); // Hủy bỏ session
-                    url = "login.jsp";
-                
+                    url = "login.jsp";                
+                }else  if (action.equals("search")) {
+                    MobileDAO mdao = new MobileDAO();
+                    String searchTerm = request.getParameter("searchTerm");
+                    List<MobileDTO> mobiles = mdao.search(searchTerm);
+                    request.setAttribute("mobiles", mobiles);
+                    request.setAttribute("searchTerm", searchTerm);
+                    url = "search.jsp";
                 }
             }
         } catch (Exception e) {

@@ -1,19 +1,21 @@
 <%-- 
     Document   : search
-    Created on : Feb 25, 2025, 9:07:00 PM
-    Author     : ADMIND
+    Created on : Feb 13, 2025, 11:27:20 AM
+    Author     : tungi
 --%>
 
-<%@page import="dto.MobileDTO"%>
+<%@page import="dto.BookDTO"%>
+<%@page import="java.awt.print.Book"%>
 <%@page import="java.util.List"%>
 <%@page import="dto.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-16WWW">
         <title>JSP Page</title>
-         <style>
+
+        <style>
             .book-table {
                 width: 100%;
                 border-collapse: collapse;
@@ -65,8 +67,10 @@
             }
         </style> 
     </head>
-    <body>
-          <%                if (session.getAttribute("user") != null) {
+    <body> 
+        <%@include file="header.jsp" %>
+        <div style="min-height: 500px; padding: 10px">
+            <%                if (session.getAttribute("user") != null) {
                     UserDTO user = (UserDTO) session.getAttribute("user");
             %>
             <h1> Welcome <%=user.getFullName()%> </h1>
@@ -74,58 +78,62 @@
                 <input type="hidden" name="action" value="logout"/>
                 <input type="submit" value="Logout"/>
             </form>
-
+             <a href="bookForm.jsp">
+                Add
+            </a>
             <br/>
-            
             <%
                 String searchTerm = request.getAttribute("searchTerm")+"";
-                searchTerm= searchTerm.equals("null")?"":searchTerm;
+                searchTerm = searchTerm.equals("null") ? "" : searchTerm;
             %>
             <form action="MainController">
                 <input type="hidden" name="action" value="search"/>
                 Search Books: <input type="text" name="searchTerm" value="<%=searchTerm%>"/>
                 <input type="submit" value="Search"/>
             </form>
-          
-           <%
-                if (request.getAttribute("mobiles") != null) {
-                    List<MobileDTO> mobiles = (List<MobileDTO>) request.getAttribute("mobiles");
+
+            <%
+                if (request.getAttribute("books") != null) {
+                    List<BookDTO> books = (List<BookDTO>) request.getAttribute("books");
 
             %>
             <table class="book-table">
                 <thead>
                     <tr>
-                        <th>MobileId</th>
-                        <th>Description</th>
+                        <th>BookID</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>PublishYear</th>
                         <th>Price</th>
-                        <th>MobileName</th>
-                        <th>YearOfProduction</th>
                         <th>Quantity</th>
-                        <th>Action</th>
+                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <%            for (MobileDTO m : mobiles) {
+                    <%            for (BookDTO b : books) {
                     %>
                     <tr>
-                        <td><%= m.getMobileId()%></td>
-                        <td><%= m.getDescription()%></td>
-                        <td><%= m.getPrice()%></td>
-                        <td><%= m.getMobileName()%></td>
-                        <td><%= m.getYearOfProduction()%></td>
-                        <td><%= m.getQuantity()%></td>
-                        
+                        <td><%=b.getBookID()%></td> 
+                        <td><%=b.getTitle()%></td>
+                        <td><%=b.getAuthor()%></td>
+                        <td><%=b.getPublishYear()%></td>
+                        <td><%=b.getPrice()%></td>
+                        <td><%=b.getQuantity()%></td>
+                         <td><a href="MainController?action=delete&id=<%=b.getBookID()%>&searchTerm=<%=searchTerm%>">
+                                <img src="assets/images/delete-icon.png" style="height: 25px"/>
+                                
+                            </a></td>
                     </tr>
                     <%
                         }
                     %>
                 </tbody>
             </table>
-            <%    }   
+            <%    }
             } else { %>
             You do not have permission to access this content.
             <%}%>
         </div>
-            </form>
+        <jsp:include page="footer.jsp"/>
     </body>
 </html>
