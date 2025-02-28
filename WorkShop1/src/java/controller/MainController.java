@@ -5,10 +5,13 @@
  */
 package controller;
 
+import dao.ProjectDAO;
 import dao.UserDAO;
+import dto.ProjectDTO;
 import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MainController", urlPatterns = {"/MainController"})
 public class MainController extends HttpServlet {
-
+     private ProjectDAO projectDAO = new ProjectDAO();
     private static final String LOGIN_PAGE = "login.jsp";
 
     public UserDTO getUser(String strUserID) {
@@ -37,6 +40,16 @@ public class MainController extends HttpServlet {
 //        System.out.println(user.getPassword());
         System.out.println(strPassword);
         return user != null && user.getPassword().equals(strPassword);
+    }
+     public void search(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String searchTerm = request.getParameter("searchTerm");
+        if (searchTerm == null) {
+            searchTerm = "";
+        }
+        List<ProjectDTO> projects = projectDAO.search(searchTerm);
+        request.setAttribute("projects", projects);
+        request.setAttribute("searchTerm", searchTerm);
     }
 
     /**
@@ -65,7 +78,7 @@ public class MainController extends HttpServlet {
                         url = "search.jsp";
                         UserDTO user = getUser(strUserID);
                         request.getSession().setAttribute("user", user);
-
+                        search(request, response);
                     } else {
                         request.setAttribute("message", "Incorrect UserID or Password");
                         url = "login.jsp";
@@ -73,6 +86,9 @@ public class MainController extends HttpServlet {
                 } else if (action.equals("logout")) {
                     request.getSession().invalidate(); // Hủy bỏ session
                     url = "login.jsp";
+                }else if (action.equals("search")) {
+                    search(request, response);
+                    url = "search.jsp";
                 }
             }
         } catch (Exception e) {
