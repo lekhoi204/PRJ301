@@ -5,6 +5,17 @@
  */
 package dto;
 
+import java.util.Date;
+
+
+
+
+
+
+
+
+
+
 /**
  *
  * @author ADMIND
@@ -14,12 +25,12 @@ public class ProjectDTO {
     private String project_name;
     private String Description;
     private String Status;
-    private String estimated_launch;
+    private Date estimated_launch;
 
     public ProjectDTO() {
     }
 
-    public ProjectDTO(int project_id, String project_name, String Description, String Status, String estimated_launch) {
+    public ProjectDTO(int project_id, String project_name, String Description, String Status, Date estimated_launch) {
         this.project_id = project_id;
         this.project_name = project_name;
         this.Description = Description;
@@ -59,13 +70,12 @@ public class ProjectDTO {
         this.Status = Status;
     }
 
-    public String getEstimated_launch() {
+    public Date getEstimated_launch() {
         return estimated_launch;
     }
 
-    public void setEstimated_launch(String estimated_launch) {
+    public void setEstimated_launch(Date estimated_launch) {
         this.estimated_launch = estimated_launch;
     }
-    
-    
+
 }

@@ -66,7 +66,7 @@ public class MainController extends HttpServlet {
         return url;
     }
 
-    public String processSearch(HttpServletRequest request, HttpServletResponse response)
+    private String processSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = LOGIN_PAGE;
         HttpSession session = request.getSession();
@@ -79,12 +79,12 @@ public class MainController extends HttpServlet {
             List<BookDTO> books = bookDAO.searchByTitle2(searchTerm);
             request.setAttribute("books", books);
             request.setAttribute("searchTerm", searchTerm);
-             url = "search.jsp";
+            url = "search.jsp";
         }
         return url;
     }
 
-    public String processDelete(HttpServletRequest request, HttpServletResponse response)
+    private String processDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = LOGIN_PAGE;
         HttpSession session = request.getSession();
@@ -98,7 +98,7 @@ public class MainController extends HttpServlet {
         return url;
     }
 
-    public String processAdd(HttpServletRequest request, HttpServletResponse response)
+    private String processAdd(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = LOGIN_PAGE;
         HttpSession session = request.getSession();
@@ -116,10 +116,26 @@ public class MainController extends HttpServlet {
                     checkError = true;
                     request.setAttribute("txtBookID_error", "Book ID cannot be empty.");
                 }
+                if (title == null || title.trim().isEmpty()) {
+                    checkError = true;
+                    request.setAttribute("txtTitle_error", "Title cannot be empty.");
+                }
+                if (author == null || author.trim().isEmpty()) {
+                    checkError = true;
+                    request.setAttribute("txtAuthor_error", "Author cannot be empty.");
+                }
+                if (price <= 0) {
+                    checkError = true;
+                    request.setAttribute("txtPrice_error", "price must be > 0");
+                }
 
                 if (quantity < 0) {
                     checkError = true;
                     request.setAttribute("txtQuantity_error", "Quantity >=0.");
+                }
+                if (publishYear <= 0) {
+                    checkError = true;
+                    request.setAttribute("txtPublishYear_error", "PublishYear must be > 0");
                 }
 
                 BookDTO book = new BookDTO(bookID, title, author, publishYear, price, quantity);

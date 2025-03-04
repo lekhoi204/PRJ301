@@ -20,9 +20,26 @@ import utils.DBUtils;
 public class ProjectDAO implements IDAO<ProjectDTO, String>{
 
     @Override
-    public boolean create(ProjectDTO entity) {
-        return false;
+   public boolean create(ProjectDTO entity) {
+       String sql = "INSERT INTO tblStartupProjects "
+                + " (project_id, project_name,Description,Status,estimated_launch) "
+                + " VALUES (?, ?, ?, ?, ?) ";
+        try {
+            Connection conn = DBUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, entity.getProject_id());
+            ps.setString(2, entity.getProject_name());
+            ps.setString(3, entity.getDescription());
+            ps.setString(4, entity.getStatus());
+            ps.setDate(5, new java.sql.Date(entity.getEstimated_launch().getTime()));
+           
+            int i = ps.executeUpdate();
+            return i > 0;
+        } catch (Exception e) {
+            System.out.println(e.toString());
         }
+        return false;
+    }
 
     @Override
     public List<ProjectDTO> readAll() {
@@ -59,7 +76,7 @@ public class ProjectDAO implements IDAO<ProjectDTO, String>{
                         rs.getString("project_name"),
                         rs.getString("Description"),
                         rs.getString("Status"),
-                        rs.getString("estimated_launch")
+                        rs.getDate("estimated_launch")
                         );
 
                 list.add(p);
@@ -69,6 +86,21 @@ public class ProjectDAO implements IDAO<ProjectDTO, String>{
         }
         return list;
     }
-    
-    
+     public boolean updateStatus(String id, String newStatus) {
+        String sql = "UPDATE tblStartupProjects SET Status = ? WHERE project_id = ?";
+        try {
+            Connection conn = DBUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, newStatus);
+            ps.setString(2, id);
+            int i = ps.executeUpdate();
+            return i > 0;
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return false;
+    }
 }
+    
+    
+

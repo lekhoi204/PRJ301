@@ -5,19 +5,27 @@
  */
 package controller;
 
+import com.sun.org.glassfish.gmbal.Description;
 import dao.ProjectDAO;
 import dao.UserDAO;
 import dto.ProjectDTO;
 import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import javafx.animation.Animation.Status;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import utils.AuthUtils;
 
 /**
  *
@@ -25,31 +33,125 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "MainController", urlPatterns = {"/MainController"})
 public class MainController extends HttpServlet {
-     private ProjectDAO projectDAO = new ProjectDAO();
+
+    private ProjectDAO projectDAO = new ProjectDAO();
     private static final String LOGIN_PAGE = "login.jsp";
 
-    public UserDTO getUser(String strUserID) {
-        UserDAO udao = new UserDAO();
-        UserDTO user = udao.readById(strUserID);
-        return user;
+    private String processLogin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String url = LOGIN_PAGE;
+        //
+        String strUserID = request.getParameter("txtUserID");
+        String strPassword = request.getParameter("txtPassword");
+        if (AuthUtils.isValidLogin(strUserID, strPassword)) {
+            url = "search.jsp";
+            UserDTO user = AuthUtils.getUser(strUserID);
+            request.getSession().setAttribute("user", user);
+
+            // search
+            processSearch(request, response);
+        } else {
+            request.setAttribute("message", "Incorrect UserID or Password");
+            url = "login.jsp";
+        }
+        //
+        return url;
     }
 
-    public boolean isValidLogin(String strUserID, String strPassword) {
-        UserDTO user = getUser(strUserID);
-        System.out.println(user);
-//        System.out.println(user.getPassword());
-        System.out.println(strPassword);
-        return user != null && user.getPassword().equals(strPassword);
-    }
-     public void search(HttpServletRequest request, HttpServletResponse response)
+    private String processSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String searchTerm = request.getParameter("searchTerm");
-        if (searchTerm == null) {
-            searchTerm = "";
+        String url = LOGIN_PAGE;
+        HttpSession session = request.getSession();
+        if (AuthUtils.isLoggedIn(session)) {
+            // search
+            String searchTerm = request.getParameter("searchTerm");
+            if (searchTerm == null) {
+                searchTerm = "";
+            }
+            List<ProjectDTO> projects = projectDAO.search(searchTerm);
+            request.setAttribute("projects", projects);
+            request.setAttribute("searchTerm", searchTerm);
+            url = "search.jsp";
         }
-        List<ProjectDTO> projects = projectDAO.search(searchTerm);
-        request.setAttribute("projects", projects);
-        request.setAttribute("searchTerm", searchTerm);
+        return url;
+
+    }
+
+    private String processLogout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String url = LOGIN_PAGE;
+        //
+        HttpSession session = request.getSession();
+        if (AuthUtils.isLoggedIn(session)) {
+            request.getSession().invalidate(); // Hủy bỏ session
+            url = "login.jsp";
+        }
+        //
+        return url;
+    }
+
+    public String processAdd(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String url = LOGIN_PAGE;
+        HttpSession session = request.getSession();
+        if (AuthUtils.isAdmin(session)) {
+            try {
+                boolean checkError = false;
+                int project_id = Integer.parseInt(request.getParameter("txtProjectID"));
+                String project_name = request.getParameter("txtProjectName");
+                String Description = request.getParameter("txtDescription");
+                String Status = request.getParameter("txtstatus");
+                String estimatedLaunchStr = request.getParameter("txtEstimatedLaunch");
+                Date estimated_launch = null;
+                if (estimatedLaunchStr != null && !estimatedLaunchStr.isEmpty()) {
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        estimated_launch = (Date) dateFormat.parse(estimatedLaunchStr);
+                    } catch (ParseException e) {
+                        checkError = true;
+                        request.setAttribute("txtEstimatedLaunch_error", "Invalid date format.");
+                    }
+                }
+                 
+                if (project_id == 0) {
+                    checkError = true;
+                    request.setAttribute("txtProjectID_error", "ProjectID cannot be empty.");
+                }
+
+                ProjectDTO project = new ProjectDTO(project_id, project_name, Description, Status, estimated_launch);
+
+                if (!checkError) {
+                    projectDAO.create(project);
+                    // search
+                    url = processSearch(request, response);
+                } else {
+                    url = "projectForm.jsp";
+                    request.setAttribute("project", project);
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return url;
+    }
+    private String processUpdate(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String url = LOGIN_PAGE;
+        HttpSession session = request.getSession();
+        if (AuthUtils.isAdmin(session)) {
+            String id = request.getParameter("id");
+            String newStatus = request.getParameter("txtstatus");
+            
+            if (projectDAO.updateStatus(id, newStatus)) {
+                request.setAttribute("message", "Status updated successfully!");
+            } else {
+                request.setAttribute("message", "Failed to update status!");
+            }
+            
+            // Redirect back to search page
+            url = processSearch(request, response);
+        }
+        return url;
     }
 
     /**
@@ -72,23 +174,15 @@ public class MainController extends HttpServlet {
                 url = LOGIN_PAGE;
             } else {
                 if (action.equals("login")) {
-                    String strUserID = request.getParameter("txtUserID");
-                    String strPassword = request.getParameter("txtPassword");
-                    if (isValidLogin(strUserID, strPassword)) {
-                        url = "search.jsp";
-                        UserDTO user = getUser(strUserID);
-                        request.getSession().setAttribute("user", user);
-                        search(request, response);
-                    } else {
-                        request.setAttribute("message", "Incorrect UserID or Password");
-                        url = "login.jsp";
-                    }
+                    url = processLogin(request, response);
                 } else if (action.equals("logout")) {
-                    request.getSession().invalidate(); // Hủy bỏ session
-                    url = "login.jsp";
-                }else if (action.equals("search")) {
-                    search(request, response);
-                    url = "search.jsp";
+                    url = processLogout(request, response);
+                } else if (action.equals("search")) {
+                    url = processSearch(request, response);
+                } else if (action.equals("add")) {
+                    url = processAdd(request, response);
+                }else if(action.equals("update")){
+                    url = processUpdate(request, response);
                 }
             }
         } catch (Exception e) {
