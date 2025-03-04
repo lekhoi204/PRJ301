@@ -1,9 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <style>
     .footer {
-        background-color: #2c3e50;
+        background-color: #1a237e;
         color: #fff;
-        padding: 3rem 0;
+        padding: 2rem 0;
         margin-top: 2rem;
     }
 
@@ -12,20 +12,22 @@
         margin: 0 auto;
         padding: 0 1rem;
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         gap: 2rem;
     }
 
     .footer-section h3 {
         font-size: 1.2rem;
         margin-bottom: 1rem;
-        color: #3498db;
+        color: #64ffda;
+        font-weight: 600;
     }
 
     .footer-section p {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
         font-size: 0.9rem;
-        line-height: 1.5;
+        line-height: 1.6;
+        color: #e8eaf6;
     }
 
     .footer-links {
@@ -33,76 +35,76 @@
     }
 
     .footer-links li {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.8rem;
     }
 
     .footer-links a {
-        color: #fff;
+        color: #e8eaf6;
         text-decoration: none;
         transition: color 0.3s ease;
+        font-size: 0.9rem;
     }
 
     .footer-links a:hover {
-        color: #3498db;
+        color: #64ffda;
     }
 
-    .social-links {
+    .contact-info {
         display: flex;
-        gap: 1rem;
-        margin-top: 1rem;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 0.8rem;
     }
 
-    .social-links a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 1.5rem;
+    .contact-info i {
+        color: #64ffda;
     }
 
     .copyright {
         text-align: center;
         padding-top: 2rem;
         margin-top: 2rem;
-        border-top: 1px solid #34495e;
+        border-top: 1px solid rgba(255,255,255,0.1);
         font-size: 0.9rem;
+        color: #e8eaf6;
     }
 </style>
 
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-section">
-            <h3>Về chúng tôi</h3>
-            <p>Shop Online là điểm đến tin cậy cho những sản phẩm chất lượng với giá cả hợp lý. Chúng tôi cam kết mang đến trải nghiệm mua sắm tốt nhất cho khách hàng.</p>
+            <h3>About StartupManager</h3>
+            <p>A comprehensive project management system designed specifically for startups. We help teams track, manage, and succeed in their innovative projects.</p>
         </div>
         
         <div class="footer-section">
-            <h3>Liên kết nhanh</h3>
+            <h3>Quick Links</h3>
             <ul class="footer-links">
-                <li><a href="#">Trang chủ</a></li>
-                <li><a href="#">Sản phẩm</a></li>
-                <li><a href="#">Giỏ hàng</a></li>
-                <li><a href="#">Chính sách</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Projects</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Documentation</a></li>
             </ul>
         </div>
         
         <div class="footer-section">
-            <h3>Liên hệ</h3>
-            <p>Địa chỉ: 123 Đường ABC, Quận XYZ</p>
-            <p>Email: contact@shoponline.com</p>
-            <p>Điện thoại: (84) 123-456-789</p>
-        </div>
-        
-        <div class="footer-section">
-            <h3>Theo dõi chúng tôi</h3>
-            <p>Cập nhật tin tức mới nhất và khuyến mãi từ chúng tôi</p>
-            <div class="social-links">
-                <a href="#">📱</a>
-                <a href="#">💬</a>
-                <a href="#">📷</a>
+            <h3>Contact Information</h3>
+            <div class="contact-info">
+                <i>📍</i>
+                <p>FPT University, District 9, Ho Chi Minh City</p>
+            </div>
+            <div class="contact-info">
+                <i>📧</i>
+                <p>support@startupmanager.com</p>
+            </div>
+            <div class="contact-info">
+                <i>📱</i>
+                <p>(+84) 123-456-789</p>
             </div>
         </div>
     </div>
     
     <div class="copyright">
-        <p>&copy; 2024 Shop Online. Tất cả quyền được bảo lưu.</p>
+        <p>&copy; 2024 StartupManager. All rights reserved.</p>
     </div>
 </footer>

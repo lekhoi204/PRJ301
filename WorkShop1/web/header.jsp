@@ -9,10 +9,11 @@
     }
 
     .header {
-        background-color: #2c3e50;
+        background-color: #1a237e;
         padding: 1rem 0;
         width: 100%;
         top: 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     .container {
@@ -25,60 +26,35 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 0 20px;
     }
 
     .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-text {
         color: #fff;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         font-weight: bold;
         text-decoration: none;
     }
 
-    .menu {
-        display: flex;
-        list-style: none;
-        gap: 2rem;
+    .logo-desc {
+        color: #e8eaf6;
+        font-size: 0.9rem;
     }
 
-    .menu-item a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 1rem;
-        transition: color 0.3s ease;
-    }
-
-    .menu-item a:hover {
-        color: #3498db;
-    }
-
-    .search-bar {
-        display: flex;
-        align-items: center;
-        background: #fff;
-        border-radius: 20px;
-        padding: 0.5rem 1rem;
-    }
-
-    .search-input {
-        border: none;
-        outline: none;
-        padding: 0.2rem;
-        width: 200px;
-    }
-
-    .search-button {
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #2c3e50;
-    }
-
-    /* Styles for welcome and logout */
+    /* User section styles */
     .user-section {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        margin-left: 1.5rem;
+        gap: 1.5rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 8px 15px;
+        border-radius: 8px;
     }
 
     .welcome-text {
@@ -87,63 +63,46 @@
     }
 
     .user-name {
-        color: #3498db;
+        color: #64ffda;
         font-weight: bold;
     }
 
     .logout-btn {
-        background-color: #e74c3c;
+        background-color: #ff1744;
         color: white;
         border: none;
         border-radius: 4px;
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
+        padding: 8px 16px;
+        font-size: 0.9rem;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: all 0.3s ease;
     }
 
     .logout-btn:hover {
-        background-color: #c0392b;
-    }
-
-    /* Adjust layout for user section */
-    .right-section {
-        display: flex;
-        align-items: center;
+        background-color: #d50000;
+        transform: translateY(-1px);
     }
 </style>
 
 <header class="header">
-    <%
-
-    %>
-    <div class="container">
-        <nav class="nav">
-            <a href="#" class="logo">SHOP ONLINE</a>
-            <ul class="menu">
-                <li class="menu-item"><a href="#">Trang chủ</a></li>
-                <li class="menu-item"><a href="#">Sản phẩm</a></li>
-                <li class="menu-item"><a href="#">Giỏ hàng</a></li>
-                <li class="menu-item"><a href="#">Liên hệ</a></li>
-            </ul>
-            <div class="right-section">
-                <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Tìm kiếm...">
-                    <button class="search-button">🔍</button>
-                </div>
-                <%                    if (AuthUtils.isLoggedIn(session)) {
-                        UserDTO userHeader = AuthUtils.getUser(session);
-
-                %>
-                <div class="user-section">
-                    <span class="welcome-text">Xin chào, <span class="user-name"><%=userHeader.getName()%></span>!</span>
-                    <form action="MainController" method="post" style="margin: 0;">
-                        <input type="hidden" name="action" value="logout"/>
-                        <input type="submit" value="Đăng xuất" class="logout-btn"/>
-                    </form>
-                </div>
-                <%}%>
+    <nav class="nav">
+        <div class="logo">
+            <div>
+                <span class="logo-text">StartupManager</span>
+                <div class="logo-desc">Project Management System</div>
             </div>
-        </nav>
-    </div>
+        </div>
+
+        <%  if (AuthUtils.isLoggedIn(session)) {
+                UserDTO userHeader = AuthUtils.getUser(session);
+        %>
+        <div class="user-section">
+            <span class="welcome-text">Welcome, <span class="user-name"><%=userHeader.getName()%></span></span>
+            <form action="MainController" method="post" style="margin: 0;">
+                <input type="hidden" name="action" value="logout"/>
+                <input type="submit" value="Logout" class="logout-btn"/>
+            </form>
+        </div>
+        <% } %>
+    </nav>
 </header>
