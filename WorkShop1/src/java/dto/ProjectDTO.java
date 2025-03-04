@@ -28,6 +28,9 @@ public class ProjectDTO {
     private Date estimated_launch;
 
     public ProjectDTO() {
+        this.project_id =0;
+        this.project_name = "";
+        this.Description = "";
     }
 
     public ProjectDTO(int project_id, String project_name, String Description, String Status, Date estimated_launch) {

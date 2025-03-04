@@ -97,7 +97,7 @@ public class MainController extends HttpServlet {
         if (AuthUtils.isAdmin(session)) {
             try {
                 boolean checkError = false;
-                int project_id = Integer.parseInt(request.getParameter("txtProjectID"));
+                int project_id = 0;                
                 String project_name = request.getParameter("txtProjectName");
                 String Description = request.getParameter("txtDescription");
                 String Status = request.getParameter("txtstatus");
@@ -112,12 +112,24 @@ public class MainController extends HttpServlet {
                         request.setAttribute("txtEstimatedLaunch_error", "Invalid date format.");
                     }
                 }
-                 
-                if (project_id == 0) {
-                    checkError = true;
-                    request.setAttribute("txtProjectID_error", "ProjectID cannot be empty.");
-                }
 
+                String projectIdStr = request.getParameter("txtProjectID");
+                try {
+
+                    project_id = Integer.parseInt(projectIdStr.trim());
+                } catch (NumberFormatException e) {
+                    checkError = true;
+                    request.setAttribute("txtProjectID_error", "Project ID must be a number!");
+                }
+                if (project_name == null || project_name.trim().isEmpty()) {
+                    checkError = true;
+                    request.setAttribute("txtProjectName_error", "Project Name cannot be empty.");
+                }
+                if (Description == null || Description.trim().isEmpty()) {
+                    checkError = true;
+                    request.setAttribute("txtDescription_error", "Description cannot be empty.");
+                }
+                
                 ProjectDTO project = new ProjectDTO(project_id, project_name, Description, Status, estimated_launch);
 
                 if (!checkError) {
@@ -134,6 +146,7 @@ public class MainController extends HttpServlet {
         }
         return url;
     }
+
     private String processUpdate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String url = LOGIN_PAGE;
@@ -141,13 +154,13 @@ public class MainController extends HttpServlet {
         if (AuthUtils.isAdmin(session)) {
             String id = request.getParameter("id");
             String newStatus = request.getParameter("txtstatus");
-            
+
             if (projectDAO.updateStatus(id, newStatus)) {
                 request.setAttribute("message", "Status updated successfully!");
             } else {
                 request.setAttribute("message", "Failed to update status!");
             }
-            
+
             // Redirect back to search page
             url = processSearch(request, response);
         }
@@ -181,7 +194,7 @@ public class MainController extends HttpServlet {
                     url = processSearch(request, response);
                 } else if (action.equals("add")) {
                     url = processAdd(request, response);
-                }else if(action.equals("update")){
+                } else if (action.equals("update")) {
                     url = processUpdate(request, response);
                 }
             }
