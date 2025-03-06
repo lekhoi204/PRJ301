@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
  */
 public class AuthUtils {
 
-    public static final String ADMIN_ROLE = "Founder";
-    public static final String USER_ROLE = "Team Member";
+    public static final String ADMIN_ROLE = "AD";
+    public static final String USER_ROLE = "US";
 
     public static UserDTO getUser(String strUserID) {
         UserDAO udao = new UserDAO();
@@ -27,6 +27,7 @@ public class AuthUtils {
     public static boolean isValidLogin(String strUserID, String strPassword) {
         UserDTO user = getUser(strUserID);
         System.out.println(user);
+//        System.out.println(user.getPassword());
         System.out.println(strPassword);
         return user != null && user.getPassword().equals(strPassword);
     }
@@ -50,7 +51,7 @@ public class AuthUtils {
             return false;
         }
         UserDTO user = (UserDTO) session.getAttribute("user");
-        return user.getRole().equals(ADMIN_ROLE);
+        return user.getRoleID().equals(ADMIN_ROLE);
     }
 
 }

@@ -1,15 +1,9 @@
-<%-- 
-    Document   : login4
-    Created on : Feb 28, 2025, 7:59:35 PM
-    Author     : ADMIND
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
         <title>Đăng nhập</title>
         <style>
             .login-container {
@@ -97,14 +91,15 @@
                     </div>
 
                     <button type="submit" class="submit-btn">Đăng nhập</button>
-
+                    
                     <%
-                        String message = request.getAttribute("message") + "";
+                        String message = request.getAttribute("message")+"";
                     %>
-                    <%=message.equals("null") ? "" : message%>
+                    <%=message.equals("null")?"":message%>
                 </form>
             </div>
         </div>
-        <%@include file="footer.jsp" %>
+
+        <jsp:include page="footer.jsp"/>
     </body>
 </html>
