@@ -5,6 +5,7 @@
  */
 package dao;
 
+import dto.CategoryDTO;
 import dto.ProductDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -66,11 +67,24 @@ public class ProductDAO implements IDAO<ProductDTO, String> {
     public List<ProductDTO> search(String searchTerm) {
         return null;
     }
-    public static void main(String[] args){
-        ProductDAO  product = new ProductDAO();
-        List<ProductDTO> list = product.readAll();
-        for(ProductDTO o : list){
-            System.out.println(o);
+     public List<CategoryDTO> readCategory() {
+        List<CategoryDTO> list = new ArrayList<>();
+        String sql = "select * from Categories";
+        try {
+            Connection conn =  DBUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+          while (rs.next()) {
+                CategoryDTO c = new CategoryDTO(
+                        rs.getInt("category_id"),
+                        rs.getString("name")
+                        );
+                list.add(c);
+          }
+            } catch (Exception e) {
         }
+        return list;
     }
+   
+    
 }

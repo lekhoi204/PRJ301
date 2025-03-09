@@ -491,11 +491,9 @@
             <div class="category-list">
                 <ul>
                     <li><a href="#" class="active">Tất cả</a></li>
-                    <li><a href="#">Anime</a></li>
-                    <li><a href="#">Game</a></li>
-                    <li><a href="#">Marvel</a></li>
-                    <li><a href="#">DC Comics</a></li>
-                    <li><a href="#">Gundam</a></li>
+                        <c:forEach items="${listC}" var ="o">
+                        <li><a href="#">${o.name}</a></li>
+                        </c:forEach>
                 </ul>
             </div>
         </div>
@@ -512,7 +510,7 @@
                                  class="card-img-top" alt="${o.description}">
                             <div class="card-body">
                                 <h5 class="card-title">${o.name}</h5>
-                                <p class="card-text">${o.price}</p>
+                                <p class="card-text">${o.price}$</p>
                                 <a href="#" class="btn btn-primary">Thêm vào giỏ</a>
                             </div>
                         </div>
