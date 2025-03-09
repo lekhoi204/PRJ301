@@ -83,7 +83,7 @@ public class MainController extends HttpServlet {
         //
         HttpSession session = request.getSession();
         if (AuthUtils.isLoggedIn(session)) {
-            request.getSession().invalidate(); // Hủy bỏ session
+            request.getSession().invalidate(); 
             url = "login.jsp";
         }
         //
@@ -124,11 +124,7 @@ public class MainController extends HttpServlet {
                     checkError = true;
                     request.setAttribute("txtProjectName_error", "Project Name cannot be empty.");
                 }
-                if (Description == null || Description.trim().isEmpty()) {
-                    checkError = true;
-                    request.setAttribute("txtDescription_error", "Description cannot be empty.");
-                }
-                
+               
                 ProjectDTO project = new ProjectDTO(project_id, project_name, Description, Status, estimated_launch);
 
                 if (!checkError) {
