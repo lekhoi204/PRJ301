@@ -464,6 +464,18 @@
                 display: inline-block;
                 margin-bottom: 15px;
             }
+
+            /* Thêm vào phần style trong home.jsp */
+            .card-title a {
+                text-decoration: none; /* Bỏ gạch chân mặc định */
+                color: #2c3e50; /* Màu chữ mặc định */
+                transition: all 0.3s ease; /* Hiệu ứng mượt khi hover */
+            }
+
+            .card-title a:hover {
+                text-decoration: underline; /* Thêm gạch chân khi hover */
+                color: #3498db; /* Đổi màu chữ khi hover */
+            }
         </style>
     </head>
     <body>
@@ -472,7 +484,7 @@
         <!-- Banner -->
         <div class="banner">
             <div class="container">
-                <h1>Chào mừng đến với Figure Shop</h1>
+                <h1>Chào mừng đến với Figure Store</h1>
                 <p>Khám phá bộ sưu tập mô hình độc đáo của chúng tôi</p>
                 <!-- Thêm search box -->
                 <div class="search-box">
@@ -490,9 +502,12 @@
         <div class="container">
             <div class="category-list">
                 <ul>
-                    <li><a href="#" class="active">Tất cả</a></li>
-                        <c:forEach items="${listC}" var ="o">
-                        <li><a href="#">${o.name}</a></li>
+
+                    <li><a href="MainController" class="${empty tag ? 'active' : ''}">Tất cả</a></li>
+                        <c:forEach items="${listC}" var="o">
+
+                        <li><a href="category?category_id=${o.category_id}" 
+                               class="${tag == o.category_id ? 'active' : ''}">${o.name}</a></li>
                         </c:forEach>
                 </ul>
             </div>
@@ -507,9 +522,9 @@
                     <div class="col-md-3 mb-4">
                         <div class="card">
                             <img src="${o.image_url}" 
-                                 class="card-img-top" alt="${o.description}">
+                                 class="card-img-top" alt="${o.name}">
                             <div class="card-body">
-                                <h5 class="card-title">${o.name}</h5>
+                                <h5 class="card-title"><a href="detail?pid=${o.product_id}">${o.name}</a></h5>
                                 <p class="card-text">${o.price}$</p>
                                 <a href="#" class="btn btn-primary">Thêm vào giỏ</a>
                             </div>
@@ -517,10 +532,11 @@
                     </div>
                 </c:forEach>
 
+            </div>
+        </div>
 
 
-                <jsp:include page="footer.jsp" />
 
-
-                </body>
-                </html>
+        <jsp:include page="footer.jsp" />
+    </body>
+</html>
