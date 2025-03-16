@@ -8,51 +8,21 @@ package controller;
 import dao.ProductDAO;
 import dto.CategoryDTO;
 import dto.ProductDTO;
-import dto.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.AuthUtils;
 
 /**
  *
  * @author ADMIND
  */
-@WebServlet(name = "login", urlPatterns = {"/login"})
-public class login extends HttpServlet {
-
-    private static final String LOGIN_PAGE = "login.jsp";
-
-    private String processLogin(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String url = LOGIN_PAGE;
-        //
-        String strUserID = request.getParameter("txtUserID");
-        String strPassword = request.getParameter("txtPassword");
-        if (AuthUtils.isValidLogin(strUserID, strPassword)) {
-            url = "home.jsp";
-            UserDTO user = AuthUtils.getUser(strUserID);
-            request.getSession().setAttribute("user", user);
-            ProductDAO product = new ProductDAO();
-            List<ProductDTO> list = product.readAll();
-
-            List<CategoryDTO> listC = product.readCategory();
-            request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);
-            // search
-        } else {
-            request.setAttribute("message", "Incorrect Username or Password");
-            url = "login.jsp";
-        }
-        //
-        return url;
-    }
+@WebServlet(name = "search", urlPatterns = {"/search"})
+public class search extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,24 +36,16 @@ public class login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = LOGIN_PAGE;
-        try {
-            String action = request.getParameter("action");
-            System.out.println("action: " + action);
-            if (action == null) {
-                url = LOGIN_PAGE;
-            } else {
-                if (action.equals("login")) {
-                    url = processLogin(request, response);
-                }
-            }
-        } catch (Exception e) {
-            log("Error at MainController: " + e.toString());
-        } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-        }
-
+        request.setCharacterEncoding("UTF-8");
+       String txtSearch = request.getParameter("txt");
+       ProductDAO product = new ProductDAO();
+        List<ProductDTO> list = product.searchByName(txtSearch);
+         List<CategoryDTO> listC = product.readCategory();
+       
+        request.setAttribute("listC", listC);
+        request.setAttribute("listP", list);
+        request.setAttribute("txtS", txtSearch);
+        request.getRequestDispatcher("home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

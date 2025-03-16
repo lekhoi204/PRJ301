@@ -44,16 +44,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.jsp">Trang chủ</a>
+                        <a class="nav-link" href="MainController">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="products.jsp">Sản phẩm</a>
+                        <a class="nav-link" href="#">Hello</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="cart.jsp">Giỏ hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="contact.jsp">Liên hệ</a>
+                        <a class="nav-link" href="login.jsp">Login</a>
                     </li>
                 </ul>
             </div>

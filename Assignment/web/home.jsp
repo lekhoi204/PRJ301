@@ -488,8 +488,8 @@
                 <p>Khám phá bộ sưu tập mô hình độc đáo của chúng tôi</p>
                 <!-- Thêm search box -->
                 <div class="search-box">
-                    <form action="search" method="GET" class="search-form">
-                        <input type="text" name="keyword" placeholder="Tìm kiếm mô hình..." class="search-input">
+                    <form action="search" method="POST" class="search-form">
+                        <input value="${txtS}" type="text" name="txt" placeholder="Tìm kiếm mô hình..." class="search-input">
                         <button type="submit" class="search-button">
                             <i class="fas fa-search"></i> Tìm kiếm
                         </button>

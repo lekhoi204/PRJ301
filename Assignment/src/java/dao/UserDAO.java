@@ -24,12 +24,12 @@ public class UserDAO implements IDAO<UserDTO, String> {
 
     @Override
     public boolean create(UserDTO entity) {
-       return false;
+        return false;
     }
 
     @Override
     public List<UserDTO> readAll() {
-       return null;
+        return null;
     }
 
     @Override
@@ -43,11 +43,12 @@ public class UserDAO implements IDAO<UserDTO, String> {
             if (rs.next()) {
                 UserDTO user = new UserDTO(
                         rs.getInt("user_id"),
-                            rs.getString("username"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getString("role")
-                    );
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getString("fullname"),
+                        rs.getString("email"),
+                        rs.getString("role")
+                );
                 return user;
             }
         } catch (ClassNotFoundException ex) {
@@ -60,17 +61,17 @@ public class UserDAO implements IDAO<UserDTO, String> {
 
     @Override
     public boolean update(UserDTO entity) {
-      return false;
+        return false;
     }
 
     @Override
     public boolean delete(String id) {
-       return false;
+        return false;
     }
 
     @Override
     public List<UserDTO> search(String searchTerm) {
-       List<UserDTO> list = new ArrayList<>();
+        List<UserDTO> list = new ArrayList<>();
         String sql = "SELECT [user_id], [username], [password], [email], [role] FROM [Users] "
                 + "WHERE [user_id] LIKE ? "
                 + "OR [username] LIKE ? "
@@ -78,8 +79,8 @@ public class UserDAO implements IDAO<UserDTO, String> {
         try {
             Connection conn = DBUtils.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            String searchPattern = "%" + searchTerm +"%";
-            
+            String searchPattern = "%" + searchTerm + "%";
+
             pstmt.setString(1, searchPattern);
             pstmt.setString(2, searchPattern);
             pstmt.setString(3, searchPattern);
@@ -89,6 +90,7 @@ public class UserDAO implements IDAO<UserDTO, String> {
                             rs.getInt("user_id"),
                             rs.getString("username"),
                             rs.getString("password"),
+                            rs.getString("fullname"),
                             rs.getString("email"),
                             rs.getString("role")
                     );
@@ -102,6 +104,5 @@ public class UserDAO implements IDAO<UserDTO, String> {
         }
         return list;
     }
-    
-    
+
 }
