@@ -29,7 +29,27 @@ public class UserDAO implements IDAO<UserDTO, String> {
 
     @Override
     public List<UserDTO> readAll() {
-        return null;
+        List<UserDTO> list = new ArrayList<UserDTO>();
+        String sql = "SELECT * FROM [Users]";
+        try {
+            Connection conn = DBUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UserDTO user = new UserDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6)
+                );
+                list.add(user);
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
     }
 
     @Override
@@ -61,7 +81,28 @@ public class UserDAO implements IDAO<UserDTO, String> {
 
     @Override
     public boolean update(UserDTO entity) {
-        return false;
+        String sql = "UPDATE Users SET "
+                + " username = ?, "
+                + " password = ?, "
+                + " fullname = ?, "
+                + " email = ?, "
+                + " role = ? "
+                + " WHERE user_id = ?";
+        try {
+            Connection conn = DBUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, entity.getUsername());
+            ps.setString(2, entity.getPassword());
+            ps.setString(3, entity.getFullname());
+            ps.setString(4, entity.getEmail());
+            ps.setString(5, entity.getRole());
+            ps.setInt(6, entity.getUser_id());
+            int n = ps.executeUpdate();
+            return n > 0;
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     @Override

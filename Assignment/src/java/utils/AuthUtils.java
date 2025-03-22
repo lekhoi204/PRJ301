@@ -29,7 +29,7 @@ public class AuthUtils {
         System.out.println(user);
 //        System.out.println(user.getPassword());
         System.out.println(strPassword);
-        return user != null && user.getPassword().equals(strPassword);
+        return user != null && utils.PasswordUtils.checkPassword(strPassword, user.getPassword());
     }
 
     public static UserDTO getUser(HttpSession session) {

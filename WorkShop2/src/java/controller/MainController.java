@@ -100,7 +100,6 @@ public class MainController extends HttpServlet {
 
         if (AuthUtils.isAdmin(session)) {
             try {
-
                 boolean checkError = false;
                 String exam_title = request.getParameter("txtTitle");
                 String subject = request.getParameter("txtSubject");
@@ -111,7 +110,14 @@ public class MainController extends HttpServlet {
                 if (exam_title == null || exam_title.trim().isEmpty()) {
                     checkError = true;
                     request.setAttribute("titleError", "Title is required");
+                } else {
+                    ExamDAO examDAO = new ExamDAO();
+                    if (examDAO.isExamTitleExists(exam_title.trim())) {
+                        checkError = true;
+                        request.setAttribute("titleError", "Exam title already exists");
+                    }
                 }
+
                 if (subject == null || subject.trim().isEmpty()) {
                     checkError = true;
                     request.setAttribute("subjectError", "Subject is required");

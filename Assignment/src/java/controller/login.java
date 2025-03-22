@@ -18,6 +18,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import utils.AuthUtils;
 
 /**
@@ -36,21 +37,25 @@ public class login extends HttpServlet {
         String strUserID = request.getParameter("txtUserID");
         String strPassword = request.getParameter("txtPassword");
         if (AuthUtils.isValidLogin(strUserID, strPassword)) {
-            url = "home.jsp";
             UserDTO user = AuthUtils.getUser(strUserID);
             request.getSession().setAttribute("user", user);
-            ProductDAO product = new ProductDAO();
-            List<ProductDTO> list = product.readAll();
-
-            List<CategoryDTO> listC = product.readCategory();
-            request.setAttribute("listP", list);
-            request.setAttribute("listC", listC);
-            // search
+            url = "MainController";
         } else {
             request.setAttribute("message", "Incorrect Username or Password");
             url = "login.jsp";
         }
         //
+        return url;
+    }
+
+    private String processLogout(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String url = LOGIN_PAGE;
+        HttpSession session = request.getSession();
+        if (AuthUtils.isLoggedIn(session)) {
+            request.getSession().invalidate(); // Hủy session
+            url = "login.jsp";
+        }
         return url;
     }
 
@@ -66,6 +71,8 @@ public class login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String url = LOGIN_PAGE;
         try {
             String action = request.getParameter("action");
@@ -75,6 +82,8 @@ public class login extends HttpServlet {
             } else {
                 if (action.equals("login")) {
                     url = processLogin(request, response);
+                } else if (action.equals("logout")) {
+                    url = processLogout(request, response);
                 }
             }
         } catch (Exception e) {

@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import utils.PasswordUtils;
 
 /**
  *
@@ -34,24 +35,49 @@ public class signup extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String user = request.getParameter("txtUsername");
         String password = request.getParameter("txtPassword");
         String fullname = request.getParameter("txtFullName");
         String confirm = request.getParameter("txtConfirm");
         String email = request.getParameter("txtEmail");
+
+        String errorMessage = "";
+
         if (!password.equals(confirm)) {
-            response.sendRedirect("login.jsp");
+            errorMessage = "Mật khẩu xác nhận không khớp!";
+            request.setAttribute("SIGNUP_ERROR", errorMessage);
+            request.setAttribute("SHOW_SIGNUP", true);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             ProductDAO product = new ProductDAO();
             UserDTO a = product.checkUser(user);
             if (a == null) {
-                product.signup(user, password, fullname, email);
-                response.sendRedirect("MainController");
+                String hashedPassword = PasswordUtils.hashPassword(password);
+                if (hashedPassword != null) {
+                    product.signup(user, hashedPassword, fullname, email);
+                    request.setAttribute("SUCCESS_MESSAGE", "Đăng ký thành công! Vui lòng đăng nhập.");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                } else {
+                    errorMessage = "Có lỗi xảy ra trong quá trình xử lý! Vui lòng thử lại.";
+                    request.setAttribute("SIGNUP_ERROR", errorMessage);
+                    request.setAttribute("SHOW_SIGNUP", true);
+                    request.setAttribute("savedUsername", user);
+                    request.setAttribute("savedFullname", fullname);
+                    request.setAttribute("savedEmail", email);
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }
             } else {
-                response.sendRedirect("login.jsp");
+                errorMessage = "Tên đăng nhập đã tồn tại!";
+                request.setAttribute("SIGNUP_ERROR", errorMessage);
+                request.setAttribute("SHOW_SIGNUP", true);
+                request.setAttribute("savedUsername", user);
+                request.setAttribute("savedFullname", fullname);
+                request.setAttribute("savedEmail", email);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

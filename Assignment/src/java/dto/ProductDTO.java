@@ -16,17 +16,19 @@ public class ProductDTO {
     private double price;
     private String description;
     private String image_url;
+    private int quantity;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(int product_id, int category_id, String name, double price, String description, String image_url) {
+    public ProductDTO(int product_id, int category_id, String name, double price, String description, String image_url, int quantity) {
         this.product_id = product_id;
         this.category_id = category_id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.image_url = image_url;
+        this.quantity = quantity;
     }
 
     public int getProduct_id() {
@@ -77,9 +79,18 @@ public class ProductDTO {
         this.image_url = image_url;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString() {
-        return "Products{" + "product_id=" + product_id + ", category_id=" + category_id + ", name=" + name + ", price=" + price + ", description=" + description + ", image_url=" + image_url + '}';
+        return "ProductDTO{" + "product_id=" + product_id + ", category_id=" + category_id + ", name=" + name + ", price=" + price + ", description=" + description + ", image_url=" + image_url + ", quantity=" + quantity + '}';
     }
-    
+
+ 
 }

@@ -476,6 +476,23 @@
                 text-decoration: underline; /* Thêm gạch chân khi hover */
                 color: #3498db; /* Đổi màu chữ khi hover */
             }
+
+            .pagination {
+                margin: 20px 0;
+            }
+            .page-link {
+                color: #333;
+                border-radius: 0 !important;
+            }
+            .page-item.active .page-link {
+                background-color: #007bff;
+                border-color: #007bff;
+            }
+            .page-item.disabled .page-link {
+                color: #6c757d;
+                pointer-events: none;
+                background-color: #fff;
+            }
         </style>
     </head>
     <body>
@@ -526,7 +543,15 @@
                             <div class="card-body">
                                 <h5 class="card-title"><a href="detail?pid=${o.product_id}">${o.name}</a></h5>
                                 <p class="card-text">${o.price}$</p>
-                                <a href="#" class="btn btn-primary">Thêm vào giỏ</a>
+                                <form action="cart" method="POST">
+                                    <input type="hidden" name="action" value="add">
+                                    <input type="hidden" name="pid" value="${o.product_id}">
+                                    <input type="hidden" name="source" value="main">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -535,7 +560,26 @@
             </div>
         </div>
 
-
+        <!-- Thêm sau phần hiển thị sản phẩm -->
+        <div class="container">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                        <a class="page-link" href="MainController?page=${currentPage - 1}" tabindex="-1">Trước</a>
+                    </li>
+                    
+                    <c:forEach begin="1" end="${totalPages}" var="i">
+                        <li class="page-item ${currentPage == i ? 'active' : ''}">
+                            <a class="page-link" href="MainController?page=${i}">${i}</a>
+                        </li>
+                    </c:forEach>
+                    
+                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                        <a class="page-link" href="MainController?page=${currentPage + 1}">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
 
         <jsp:include page="footer.jsp" />
     </body>

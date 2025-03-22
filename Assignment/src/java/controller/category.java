@@ -36,13 +36,13 @@ public class category extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String cateID = request.getParameter("category_id");
         ProductDAO product = new ProductDAO();
         List<ProductDTO> list = product.getProductByCID(cateID);
         List<CategoryDTO> listC = product.readCategory();
-       
-        
-        
+
         request.setAttribute("listP", list);
         request.setAttribute("listC", listC);
         request.setAttribute("tag", cateID);

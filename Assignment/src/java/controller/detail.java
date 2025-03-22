@@ -34,10 +34,12 @@ public class detail extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String id = request.getParameter("pid");
         ProductDAO product = new ProductDAO();
         ProductDTO p = product.getProductByPID(id);
-        
+
         request.setAttribute("detail", p);
         request.getRequestDispatcher("detail.jsp").forward(request, response);
     }

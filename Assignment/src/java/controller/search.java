@@ -37,11 +37,12 @@ public class search extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-       String txtSearch = request.getParameter("txt");
-       ProductDAO product = new ProductDAO();
+        response.setCharacterEncoding("UTF-8");
+        String txtSearch = request.getParameter("txt");
+        ProductDAO product = new ProductDAO();
         List<ProductDTO> list = product.searchByName(txtSearch);
-         List<CategoryDTO> listC = product.readCategory();
-       
+        List<CategoryDTO> listC = product.readCategory();
+
         request.setAttribute("listC", listC);
         request.setAttribute("listP", list);
         request.setAttribute("txtS", txtSearch);

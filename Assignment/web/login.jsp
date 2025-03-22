@@ -254,9 +254,44 @@
 
         <script>
             window.onload = function() {
-                const message = "${requestScope.message}";
-                if (message) {
+                // Xử lý thông báo đăng ký thành công
+                const successMessage = "${requestScope.SUCCESS_MESSAGE}";
+                if (successMessage) {
+                    document.getElementById('login-error').textContent = successMessage;
                     document.getElementById('login-error').style.display = 'block';
+                    document.getElementById('login-error').style.backgroundColor = '#dff0d8';
+                    document.getElementById('login-error').style.color = '#3c763d';
+                    document.getElementById('login-error').style.border = '1px solid #d6e9c6';
+                }
+
+                // Xử lý thông báo lỗi đăng nhập
+                const loginMessage = "${requestScope.message}";
+                if (loginMessage) {
+                    document.getElementById('login-error').textContent = loginMessage;
+                    document.getElementById('login-error').style.display = 'block';
+                }
+                
+                // Xử lý thông báo lỗi đăng ký và hiển thị form đăng ký
+                const signupError = "${requestScope.SIGNUP_ERROR}";
+                const showSignup = "${requestScope.SHOW_SIGNUP}";
+                
+                if (showSignup === "true") {
+                    toggleForm();
+                    
+                    if (signupError) {
+                        const errorDiv = document.getElementById('register-error');
+                        errorDiv.textContent = signupError;
+                        errorDiv.style.display = 'block';
+                    }
+                    
+                    // Điền lại các giá trị đã nhập
+                    const savedUsername = "${requestScope.savedUsername}";
+                    const savedFullname = "${requestScope.savedFullname}";
+                    const savedEmail = "${requestScope.savedEmail}";
+                    
+                    if (savedUsername) document.getElementById('reg-username').value = savedUsername;
+                    if (savedFullname) document.getElementById('reg-fullname').value = savedFullname;
+                    if (savedEmail) document.getElementById('reg-email').value = savedEmail;
                 }
             };
 
@@ -265,7 +300,8 @@
                 container.classList.toggle('slide-left');
             }
 
-            document.querySelector('form[action="register"]').onsubmit = function(e) {
+            // Kiểm tra form đăng ký trước khi submit
+            document.querySelector('form[action="signup"]').onsubmit = function(e) {
                 const password = document.getElementById('reg-password').value;
                 const confirm = document.getElementById('reg-confirm').value;
                 const errorDiv = document.getElementById('register-error');
