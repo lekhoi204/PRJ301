@@ -6,6 +6,7 @@
 package dao;
 
 import dto.CategoryDTO;
+import dto.OrderDTO;
 import dto.ProductDTO;
 import dto.UserDTO;
 import java.sql.Connection;
@@ -373,5 +374,5 @@ public class ProductDAO implements IDAO<ProductDTO, String> {
         }
         return list;
     }
-
+ 
 }

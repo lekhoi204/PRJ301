@@ -16,76 +16,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <style>
-            .container {
-                margin-top: 80px;
-                padding: 20px;
-            }
-            
-            .order-detail-header {
-                margin-bottom: 30px;
-                border-bottom: 2px solid #e9ecef;
-                padding-bottom: 15px;
-            }
-            
-            .order-info {
-                background: #f8f9fa;
-                border-radius: 10px;
-                padding: 20px;
-                margin-bottom: 30px;
-            }
-            
-            .order-info-item {
-                margin-bottom: 10px;
-            }
-            
-            .order-info-item i {
-                width: 25px;
-                color: #007bff;
-            }
-            
-            .product-table {
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-            }
-            
-            .product-table th {
-                background: #f8f9fa;
-                border: none;
-            }
-            
-            .product-img {
-                width: 80px;
-                height: 80px;
-                object-fit: cover;
-                border-radius: 5px;
-            }
-            
-            .product-name {
-                color: #007bff;
-                text-decoration: none;
-                font-weight: 500;
-            }
-            
-            .product-name:hover {
-                text-decoration: underline;
-            }
-            
-            .total-section {
-                background: #f8f9fa;
-                border-radius: 10px;
-                padding: 20px;
-                margin-top: 30px;
-            }
-            
-            .total-amount {
-                font-size: 1.5em;
-                color: #28a745;
-                font-weight: bold;
-            }
-        </style>
+        <link rel="stylesheet" href="assets/css/orderDetail.css" />
     </head>
     <body>
         <div class="container">

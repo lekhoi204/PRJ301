@@ -146,4 +146,27 @@ public class UserDAO implements IDAO<UserDTO, String> {
         return list;
     }
 
+    public UserDTO findByEmail(String email) {
+        String sql = "SELECT * FROM [Users] WHERE [email] = ?";
+        try {
+            Connection conn = DBUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new UserDTO(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6)
+                );
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 }

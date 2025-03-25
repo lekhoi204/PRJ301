@@ -6,7 +6,6 @@
 package controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +19,7 @@ import dto.OrderDTO;
 import dao.OrderDAO;
 import dto.OrderDetailDTO;
 import java.util.Map;
+import utils.EmailUtils;
 
 /**
  *
@@ -54,10 +54,15 @@ public class checkout extends HttpServlet {
                 return;
             }
 
-            if (user == null) {
-                response.sendRedirect("login");
-                return;
-            }
+             if (user == null) {
+            // Lưu URL hiện tại vào session để sau khi đăng nhập có thể quay lại
+            session.setAttribute("returnURL", "checkout");
+            // Thêm thông báo yêu cầu đăng nhập
+            request.setAttribute("ERROR", "Vui lòng đăng nhập để tiến hành đặt hàng!");
+            request.setAttribute("SHOW_LOGIN", true); // Để hiển thị form đăng nhập
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
 
             if ("POST".equals(request.getMethod())) {
                 // Lấy thông tin từ form
@@ -108,12 +113,41 @@ public class checkout extends HttpServlet {
                         orderDAO.addOrderDetail(detail);
                     }
 
-                    // Xóa giỏ hàng
-                    session.removeAttribute("cart");
-                    session.removeAttribute("total");
+                    // Lấy thông tin đơn hàng
+                    OrderDTO createdOrder = orderDAO.getOrderById(orderId);
 
-                    request.setAttribute("SUCCESS", "Đặt hàng thành công!");
-                    response.sendRedirect("cart.jsp");
+                    if (createdOrder != null) {
+                        // Gửi email xác nhận đơn hàng
+                        try {
+                            boolean emailSent = EmailUtils.sendOrderConfirmationEmail(
+                                user.getEmail(),
+                                user.getFullname(),
+                                createdOrder
+                            );
+                            
+                            if (emailSent) {
+                                request.setAttribute("SUCCESS_MESSAGE", 
+                                    "Đặt hàng thành công! Email xác nhận đã được gửi đến " + user.getEmail());
+                            } else {
+                                request.setAttribute("SUCCESS_MESSAGE", 
+                                    "Đặt hàng thành công! Không thể gửi email xác nhận, vui lòng kiểm tra email của bạn.");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            request.setAttribute("SUCCESS_MESSAGE", 
+                                "Đặt hàng thành công! Không thể gửi email xác nhận do lỗi hệ thống.");
+                        }
+
+                        // Xóa giỏ hàng sau khi đặt hàng thành công
+                        session.removeAttribute("cart");
+                        session.removeAttribute("total");
+
+                        request.setAttribute("SUCCESS", "Đặt hàng thành công!");
+                        response.sendRedirect("order");
+                    } else {
+                        request.setAttribute("ERROR", "Không thể lấy thông tin đơn hàng vừa tạo!");
+                        request.getRequestDispatcher("checkout.jsp").forward(request, response);
+                    }
                 } else {
                     request.setAttribute("ERROR", "Đặt hàng thất bại!");
                     request.getRequestDispatcher("checkout.jsp").forward(request, response);
@@ -167,5 +201,4 @@ public class checkout extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
